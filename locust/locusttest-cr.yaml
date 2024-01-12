@@ -1,0 +1,20 @@
+apiVersion: locust.io/v1 
+kind: LocustTest 
+metadata:
+  name: demo.test 
+spec:
+  image: locustio/locust:latest
+  masterCommandSeed: 
+    --locustfile /lotest/src/demo_test.py
+    --host http://20.72.100.126
+    --users 3000
+    --spawn-rate 100
+    --run-time 30m
+  workerCommandSeed: --locustfile /lotest/src/demo_test.py
+  workerReplicas: 200
+  configMap: demo-test-map
+  labels:
+    master:
+      locust.io/role: "master"
+    worker:
+      locust.io/role: "worker"

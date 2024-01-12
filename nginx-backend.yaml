@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-backend
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: nginx-backend
+data:
+  index.html: |
+   {"R0UOS":"YI962DC","8GMEDNHLD":"NV808AQ0","GNL":"VPNH","J2YT29JK77D0SMP":"SQZBXT0QIFDRIX","1XP8PFRU1Q22":"E3WXDQ6TX27SF373Y8U3","VJ39VT005JK":null,"G5FTW3DKTV7USHTMA":null,"27YDT77VOBTGPEK8C":null,"4NFX2GG1NFF6C":null,"H9CTM5810VC14ZVD":null,"4W4ZW1YMGLAYTT":true,"R6Z78R":"IRYYS2Z","33A8HI5":true,"ZWH8DLC1O1Y37UPILX00QC":null,"SW7QA97VT":false,"HQ0O":null,"TLHQPN77E92":null,"A0SYBN":null,"JC1AM5L60G":null,"A0EOFH":null,"Z04CGUXGOR":null,"5PU93C5MGOW48R":null,"YDAR5XALPL":"PLZSKF8G3YJGYQYX3JU3C5AX","XBOEW8HFKY":"OFLM"}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: nginx-backend
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: config-volume
+          configMap:
+            name: nginx-config
+            items:
+              - key: index.html
+                path: index.html
+      nodeSelector:
+        agentpool: backend
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-clusterip
+  namespace: nginx-backend
+spec:
+  selector:
+    app: nginx
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-loadbalancer
+  namespace: nginx-backend
+spec:
+  selector:
+    app: nginx
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
