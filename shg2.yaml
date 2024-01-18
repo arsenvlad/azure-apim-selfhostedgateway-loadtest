@@ -7,7 +7,7 @@ metadata:
   labels:
     app: shg2
 data:
-  config.service.endpoint: "apipmshgperf1b.configuration.azure-api.net"
+  config.service.endpoint: "apipmshgperf1c.configuration.azure-api.net"
   neighborhood.host: "shg2-instance-discovery"
   runtime.deployment.artifact.source: "Azure Portal"
   runtime.deployment.mechanism: "YAML"
@@ -21,7 +21,7 @@ metadata:
   labels:
     app: shg2
 spec:
-  replicas: 16
+  replicas: 50
   selector:
     matchLabels:
       app: shg2
@@ -43,11 +43,11 @@ spec:
         image: mcr.microsoft.com/azure-api-management/gateway:v2
         resources:
           requests:
-            cpu: "4000m"
-            memory: 2Gi
+            cpu: "4"
+            memory: 4Gi
           limits:
-            cpu: "4000m"
-            memory: 2Gi
+            cpu: "4"
+            memory: 4Gi
         ports:
         - name: http
           containerPort: 8080
@@ -88,7 +88,7 @@ metadata:
     app: shg2
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   ports:
   - name: http
     port: 80

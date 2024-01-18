@@ -32,7 +32,7 @@ kubectl apply -f locusttest-cr.yaml
 
 ```bash
 kubectl get pods -o wide
-kubectl expose pod demo-test-master-9xpsh --name=demo-test-master-web --type=NodePort --port=8089
+kubectl expose pod demo-test-master-wmj9v --name=demo-test-master-web --type=NodePort --port=8089
 kubectl port-forward svc/demo-test-master-web 8089:8089
 ```
 

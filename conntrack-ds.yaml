@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: conntrack-ds
+spec:
+  selector:
+    matchLabels:
+      app: conntrack-app
+  template:
+    metadata:
+      labels:
+        app: conntrack-app
+    spec:
+      hostNetwork: true  
+      containers:
+      - name: conntrack-daemon
+        image: jrecord/nettools
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - NET_ADMIN
+        command:
+        - /bin/sh
+        - -c
+        - | 
+          echo "Starting DaemonSet"
+          sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=1
+          echo "Finished DaemonSet"
