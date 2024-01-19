@@ -1,0 +1,9 @@
+config:
+  loadGenerationPods:
+    resource:
+      cpuRequest: 500m
+      memRequest: 500Mi
+      ephemeralRequest: 30M
+      cpuLimit: 1000m
+      memLimit: 1Gi
+      ephemeralLimit: 50M

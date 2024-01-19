@@ -10,7 +10,8 @@ spec:
     --users 3000
     --spawn-rate 100
     --run-time 30m
-  workerCommandSeed: --locustfile /lotest/src/demo_test.py
+    --loglevel DEBUG
+  workerCommandSeed: --locustfile /lotest/src/demo_test.py --loglevel INFO
   workerReplicas: 200
   configMap: demo-test-map
   labels:

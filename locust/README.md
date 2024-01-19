@@ -15,16 +15,16 @@ az aks get-credentials --resource-group rg-apim1 --name akslocust
 ## Install
 
 ```bash
-helm repo add locust-k8s-operator https://abdelrhmanhamouda.github.io/locust-k8s-operator/
-
 kubectl config use-context akslocust
 
-kubectl get nodes
+helm repo add locust-k8s-operator https://abdelrhmanhamouda.github.io/locust-k8s-operator/
+helm show values locust-k8s-operator/locust-k8s-operator
 
-helm install locust-operator locust-k8s-operator/locust-k8s-operator
+helm uninstall locust-operator
+helm install locust-operator locust-k8s-operator/locust-k8s-operator -f locust-operator-values.yaml
+helm get values locust-operator
 
 kubectl create configmap demo-test-map --from-file demo_test.py
-
 kubectl apply -f locusttest-cr.yaml
 ```
 
@@ -32,7 +32,7 @@ kubectl apply -f locusttest-cr.yaml
 
 ```bash
 kubectl get pods -o wide
-kubectl expose pod demo-test-master-wmj9v --name=demo-test-master-web --type=NodePort --port=8089
+kubectl expose pod demo-test-master-gs2d5 --name=demo-test-master-web --type=NodePort --port=8089
 kubectl port-forward svc/demo-test-master-web 8089:8089
 ```
 
@@ -44,3 +44,7 @@ kubectl delete configmap demo-test-map
 kubectl delete svc demo-test-master-web
 helm uninstall locust-operator
 ```
+
+## Example Locust Test CRD
+
+<https://github.com/AbdelrhmanHamouda/locust-k8s-operator/blob/master/kube/sample-cr/locust-test-cr.yaml>
